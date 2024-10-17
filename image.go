@@ -1,5 +1,5 @@
 // captcha_image.go
-package captchp
+package captcha
 
 import (
 	"image"

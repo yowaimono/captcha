@@ -1,5 +1,5 @@
 // captcha_storage.go
-package captchp
+package captcha
 
 import (
 	"sync"

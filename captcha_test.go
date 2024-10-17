@@ -1,5 +1,5 @@
 // captcha_test.go
-package captchp
+package captcha
 
 import (
 	"testing"

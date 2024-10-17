@@ -1,5 +1,5 @@
 // captcha_format.go
-package captchp
+package captcha
 
 import (
 	"math/rand"

@@ -1,5 +1,5 @@
 // captcha.go
-package captchp
+package captcha
 
 import (
 	"bytes"
