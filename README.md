@@ -14,7 +14,7 @@
 使用 `go get` 命令安装：
 
 ```bash
-go get github.com/yowaimono/captchp
+go get github.com/yowaimono/captcha
 
 ```
 
@@ -25,12 +25,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/yowaimono/captchp"
+	"github.com/yowaimono/captcha"
 )
 
 func main() {
 	// 生成一个长度为 6 的混合验证码
-	captchaID, imgBase64, err := captchp.GetOne(6, captchp.Mixed)
+	captchaID, imgBase64, err := captcha.GetOne(6, captcha.Mixed)
 	if err != nil {
 		fmt.Println("生成验证码失败:", err)
 		return
@@ -41,7 +41,7 @@ func main() {
 
 	// 验证用户输入的验证码
 	userInput := "123456" // 假设用户输入的验证码是 123456
-	isValid := captchp.Verify(captchaID, userInput)
+	isValid := captcha.Verify(captchaID, userInput)
 	fmt.Println("验证码是否有效:", isValid)
 }
 ```
