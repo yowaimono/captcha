@@ -1,4 +1,4 @@
-package internal
+package log
 
 import (
 	"fmt"
@@ -37,6 +37,11 @@ func (l *Logger) logf(level, format string, v ...interface{}) {
 	file = file[strings.LastIndex(file, "/")+1:]
 	message := fmt.Sprintf(format, v...)
 
+	// 获取函数名
+	pc, _, _, _ := runtime.Caller(2)
+	function := runtime.FuncForPC(pc).Name()
+	function = function[strings.LastIndex(function, ".")+1:]
+
 	// 添加颜色
 	var levelColor string
 	switch level {
@@ -54,7 +59,7 @@ func (l *Logger) logf(level, format string, v ...interface{}) {
 		levelColor = "\033[0m" // 默认颜色
 	}
 
-	l.logger.Printf("[\033[35mMIN\033[0m] [\033[34m%s\033[0m] [\033[36m%s:%d\033[0m] [\033[33m%s%s\033[0m] %s", now, file, line, levelColor, level, message)
+	l.logger.Printf("[\033[35mMIN\033[0m] [\033[34m%s\033[0m] [\033[36m%s:%d -> %s\033[0m] [\033[33m%s%s\033[0m] %s", now, file, line, function, levelColor, level, message)
 }
 
 // Info 记录信息级别的日志
