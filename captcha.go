@@ -173,3 +173,27 @@ func Verify(captchaID, userInput string) bool {
 	}
 	return isValid
 }
+
+// 验证验证码
+func VerifyCode(phoneNumber, userInputCode string) bool {
+	captchaInfo := getCaptcha(phoneNumber)
+	if captchaInfo == nil {
+		log.Warn("Captcha not found for phone number: %s", phoneNumber)
+		return false
+	}
+
+	if time.Now().After(captchaInfo.ExpiresAt) {
+		log.Warn("Captcha expired for phone number: %s", phoneNumber)
+		deleteCaptcha(phoneNumber)
+		return false
+	}
+
+	if captchaInfo.Code != userInputCode {
+		log.Warn("Captcha verification failed for phone number: %s", phoneNumber)
+		return false
+	}
+
+	deleteCaptcha(phoneNumber)
+	log.Info("Captcha verification successful for phone number: %s", phoneNumber)
+	return true
+}
