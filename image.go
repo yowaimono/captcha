@@ -15,8 +15,11 @@ import (
 )
 
 // 创建验证码图片
-func createCaptchaImage(code string) image.Image {
-	width, height := 120, 40
+func createCaptchaImage(code string, noiseLevel NoiseLevel) image.Image {
+	// 根据验证码的长度动态调整图片宽度
+	charWidth := 20 // 假设每个字符需要20像素的宽度
+	width := len(code) * charWidth + 20 // 加上左右边距
+	height := 40
 	img := image.NewRGBA(image.Rect(0, 0, width, height))
 
 	// 填充背景色
@@ -45,8 +48,11 @@ func createCaptchaImage(code string) image.Image {
 	// 绘制验证码
 	drawCaptcha(img, code, face)
 
+	if noiseLevel == Simple {
+		return img
+	}
 	// 添加噪点
-	addNoise(img)
+	addNoise(img, noiseLevel)
 
 	// 添加干扰线
 	addLines(img)
@@ -134,10 +140,24 @@ func rotateImage(img *image.RGBA, rad float64) *image.RGBA {
 }
 
 // 添加噪点
-func addNoise(img *image.RGBA) {
+func addNoise(img *image.RGBA, noiseLevel NoiseLevel) {
 	width, height := img.Bounds().Dx(), img.Bounds().Dy()
 	rand.Seed(time.Now().UnixNano())
-	for i := 0; i < width*height/30; i++ {
+
+	var noiseCount int
+	switch noiseLevel {
+	case Simple:
+		// Simple 级别几乎不做噪声处理
+		return
+	case Mid:
+		noiseCount = width * height / 50
+	case Hard:
+		noiseCount = width * height / 30
+	default:
+		noiseCount = width * height / 50
+	}
+
+	for i := 0; i < noiseCount; i++ {
 		x := rand.Intn(width)
 		y := rand.Intn(height)
 		img.Set(x, y, color.RGBA{0, 0, 0, 255})
